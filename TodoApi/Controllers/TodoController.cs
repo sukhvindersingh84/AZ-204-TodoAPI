@@ -58,7 +58,23 @@ namespace TodoApi.Controllers
             }
         }
 
-        
+        [HttpDelete("{id}")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        public async Task<ActionResult<Todo>> DeleteAsync(int id)
+        {
+            var item = await db.Todos.FindAsync(id);
+            if(item!=null)
+            {
+                db.Todos.Remove(item);
+                await db.SaveChangesAsync();
+                return Ok(item);
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
 
         [HttpPut("{id}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
